@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>AI Response Generator</title>
+  </head>
+  <body>
+    <h1>AI Response Generator</h1>
+    <form>
+      <label for="text-input">Enter your text:</label>
+      <br>
+      <input type="text" id="text-input" name="text">
+      <br><br>
+      <button type="button" onclick="generateResponse()">Generate Response</button>
+    </form>
+    <div id="response-container"></div>
+    <script>
+      function generateResponse() {
+        const text = document.getElementById('text-input').value;
+        axios.post('/generate', { text })
+          .then((response) => {
+            document.getElementById('response-container').innerHTML = response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            document.getElementById('response-container').innerHTML = 'Error generating AI response';
+          });
+      }
+    </script>
+  </body>
+</html>
