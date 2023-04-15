@@ -1,31 +1,102 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>AI Response Generator</title>
-  </head>
-  <body>
-    <h1>AI Response Generator</h1>
-    <form>
-      <label for="text-input">Enter your text:</label>
-      <br>
-      <input type="text" id="text-input" name="text">
-      <br><br>
-      <button type="button" onclick="generateResponse()">Generate Response</button>
-    </form>
-    <div id="response-container"></div>
-    <script>
-      function generateResponse() {
-        const text = document.getElementById('text-input').value;
-        axios.post('/generate', { text })
-          .then((response) => {
-            document.getElementById('response-container').innerHTML = response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-            document.getElementById('response-container').innerHTML = 'Error generating AI response';
-          });
-      }
-    </script>
-  </body>
+<head>
+	<meta charset="UTF-8">
+	<title>Cool AI Website</title>
+	<style>
+		body {
+			background-color: #F7DF1E;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+		
+		h1 {
+			font-size: 2em;
+			margin-bottom: 1em;
+			color: #000;
+			text-align: center;
+		}
+		
+		input[type="text"] {
+			padding: 0.5em;
+			margin: 0.5em;
+			border-radius: 0.5em;
+			border: none;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+			font-size: 1.2em;
+			width: 80%;
+			max-width: 800px;
+		}
+		
+		#ai-response {
+			margin: 1em;
+			padding: 1em;
+			border-radius: 0.5em;
+			background-color: #fff;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+			font-size: 1.2em;
+			line-height: 1.5em;
+			width: 80%;
+			max-width: 800px;
+			text-align: justify;
+		}
+		
+		button {
+			padding: 0.5em;
+			margin: 0.5em;
+			border-radius: 0.5em;
+			border: none;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+			background-color: #fff;
+			font-size: 1.2em;
+		}
+		
+		button:hover {
+			background-color: #F7DF1E;
+			color: #fff;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<h1>Cool AI Website</h1>
+	<input type="text" id="user-input" placeholder="Enter some text...">
+	<button onclick="generateResponse()">Generate Response</button>
+	<p id="ai-response"></p>
+	<script>
+		function generateResponse() {
+			const apiKey = 'YOUR_API_KEY_HERE';
+			const apiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+
+			// Get user input from the text box
+			const userInput = document.getElementById('user-input').value;
+
+			// Send a request to the OpenAI API
+			fetch(apiUrl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${apiKey}`
+				},
+				body: JSON.stringify({
+					prompt: userInput,
+					max_tokens: 1024
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				// Display the response on the webpage
+				const aiResponse = data.choices[0].text;
+				document.getElementById('ai-response').textContent = aiResponse;
+			})
+			.catch(error => console.error(error));
+		}
+	</script>
+</body>
 </html>
